@@ -3,7 +3,6 @@ package app
 import (
 	"fmt"
 	"os"
-	"strings"
 	"sync"
 	"time"
 
@@ -108,18 +107,27 @@ func Run() error {
 				duration := time.Since(startTime).Round(time.Millisecond)
 
 				log.Debugf("[%s] Execution completed in %s", h.Name, duration)
-				if result.Output != "" {
-					log.Debugf("[%s] Command output:\n%s", h.Name, result.Output)
-				}
-				output := strings.TrimSpace(result.Output)
-				if result.Error != nil {
-					log.Errorf("[%s] Command failed", h.Name)
-				} else if output != "" {
-					log.Infof("[%s] %s", h.Name, output)
+				
+				// Show output only in debug mode
+				if cfg.Debug {
+					if result.Output != "" {
+						log.Debugf("[%s] Command output:\n%s", h.Name, result.Output)
+					}
+					
+					// Detailed logging for debug mode
+					if result.Error != nil {
+						log.Errorf("[%s] ❌ Command executed failed. Duration: %s", h.Name, duration)
+					} else {
+						log.Infof("[%s] ✅ Command executed success. Duration: %s", h.Name, duration)
+					}
 				} else {
-					log.Infof("[%s] Command executed", h.Name)
+					// Minimal logging for non-debug mode - don't show command output
+					if result.Error != nil {
+						log.Errorf("[%s] ❌ Command executed failed. Duration: %s", h.Name, duration)
+					} else {
+						log.Infof("[%s] ✅ Command executed success. Duration: %s", h.Name, duration)
+					}
 				}
-				log.Infof("[%s] Duration: %s", h.Name, duration)
 			}(host)
 		}
 	}

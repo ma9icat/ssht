@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/spf13/pflag"
@@ -85,7 +84,7 @@ func Load() (*AppConfig, error) {
 	// 从命令行获取参数
 	cfg.Command = v.GetString("command")
 	if cfg.Command == "" {
-		log.Fatal("必须通过--command参数指定要执行的命令")
+		return nil, fmt.Errorf("必须通过--command参数指定要执行的命令")
 	}
 	cfg.Nodes = v.GetStringSlice("nodes")
 	cfg.Debug = v.GetBool("debug")

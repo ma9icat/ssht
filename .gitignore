@@ -1,3 +1,7 @@
-.vscode
-.codebuddy
+.vscode/
+.codebuddy/
+.idea/
 config.toml
+.claude/
+ssht
+*.exe
