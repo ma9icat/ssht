@@ -1,0 +1,32 @@
+# Sample configuration file for SSH Task Runner
+
+# Default group of nodes to execute commands on
+[groups]
+default = ["node1", "node2"]  # List of default node names
+
+# SSH host configurations
+[[hosts]]
+name = "node1"                # Node name (must match name in groups)
+ip = "10.0.0.1"               # SSH server IP address
+port = 22                     # SSH port (default: 22)
+username = "user"              # SSH username
+auth_method = "password"      # Authentication method: "password" or "private_key"
+password = "secret"           # SSH password (for password auth)
+private_key_path = ""          # Path to private key (for key auth)
+
+[[hosts]]
+name = "node2"
+ip = "10.0.0.2"
+port = 22
+username = "user"
+auth_method = "private_key"
+password = ""
+private_key_path = "~/.ssh/id_rsa"
+
+# Command execution settings
+[execution]
+command = "hostname"           # Command to execute on remote hosts
+nodes = []                     # Optional: override default nodes (comma-separated)
+debug = false                  # Enable debug logging
+log_format = "text"            # Log format: "text" or "json"
+log_file = ""                  # Optional: log file path (default: stdout)
